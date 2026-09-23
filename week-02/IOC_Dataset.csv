@@ -1,0 +1,4 @@
+IOC,Type,Source,Threat
+44d88612fea8a8f36de82e1278abb02f,MD5,Example,Malware
+example.com,Domain,OSINT,Phishing
+8.8.8.8,IP,OSINT,Network
