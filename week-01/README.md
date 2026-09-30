@@ -44,6 +44,4 @@ At the end of Week 1, we created:
 * List of intelligence sources
 * Initial threat hunting methodology
 
----
 
-# Week 2 — OSINT and IOC Data Collection
