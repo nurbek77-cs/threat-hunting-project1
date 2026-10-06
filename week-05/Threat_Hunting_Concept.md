@@ -1,77 +1,41 @@
-# Week 5 — Threat Hunting Concept
+# Threat Hunting Concept
 
-## 1. Introduction
+## What is Threat Hunting?
 
-Threat hunting is a proactive cybersecurity process used to search for suspicious or malicious activity that may not have been detected by existing security tools.
+Threat hunting is a proactive cybersecurity process used to search for suspicious or malicious activity inside an environment.
 
-Instead of waiting for an alert, a threat hunter actively searches through logs, endpoint data, and network activity.
+Unlike traditional alert-based monitoring, threat hunting does not always start with a security alert.
 
----
+Instead, analysts actively investigate systems, logs, network activity, and endpoint telemetry.
 
-## 2. Threat Hunting Models
-
-Two common threat hunting approaches are:
-
-### Intel-Driven Hunting
+## Intel-Driven Hunting
 
 Intel-driven hunting starts with known threat intelligence.
 
-Examples:
+Examples include:
 
 - Malicious IP addresses
-- Domains
-- File hashes
-- Malware indicators
+- Malicious domains
+- Malware hashes
 - Known attacker TTPs
+- Indicators of Compromise (IOCs)
 
 Example:
 
-A threat intelligence feed reports a malicious IP address.
+If threat intelligence identifies a malicious IP address, a threat hunter can search SIEM logs to determine whether any internal computer communicated with that IP.
 
-The hunter searches SIEM logs to determine whether any internal computer communicated with this IP.
+## Hypothesis-Driven Hunting
 
-Threat Intelligence → IOC → Search Logs → Investigation
-
----
-
-### Hypothesis-Driven Hunting
-
-Hypothesis-driven hunting starts with an assumption about suspicious attacker behavior.
+Hypothesis-driven hunting starts with an assumption about possible attacker behavior.
 
 Example hypothesis:
 
-"An attacker may use PowerShell to execute encoded or hidden malicious commands on a Windows endpoint."
+> An attacker may abuse PowerShell to execute suspicious commands.
 
-The hunter creates queries to search logs for evidence supporting or rejecting this hypothesis.
+The analyst then identifies the required data and searches the environment for evidence that supports or rejects the hypothesis.
 
-Hypothesis → Data → Query → Investigation → Result
+## Selected Approach
 
----
+For this assignment, we used hypothesis-driven threat hunting.
 
-## 3. Selected Hunting Approach
-
-For this project, we selected hypothesis-driven threat hunting.
-
-Our scenario focuses on suspicious PowerShell activity on Windows systems.
-
-PowerShell is a legitimate Windows administration tool, but attackers can also abuse it to execute commands, download files, or run encoded scripts.
-
-MITRE ATT&CK identifies PowerShell as technique T1059.001 under Command and Scripting Interpreter.
-
----
-
-## 4. Hunting Objective
-
-The objective of this hunt is to identify suspicious PowerShell execution by searching Windows process creation logs.
-
-We will search for indicators such as:
-
-- powershell.exe
-- -EncodedCommand
-- -enc
-- -ExecutionPolicy Bypass
-- -WindowStyle Hidden
-- download commands
-- unusual PowerShell process execution
-
-The results will then be investigated to determine whether the activity is legitimate or potentially malicious.
+The hunt focuses on suspicious PowerShell activity on a Windows endpoint.
