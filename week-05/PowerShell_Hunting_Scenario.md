@@ -1,89 +1,80 @@
-# Hypothesis-Driven Hunt — Suspicious PowerShell Activity
+# Hypothesis-Driven PowerShell Hunting Scenario
 
-## 1. Scenario
+## Scenario
 
-An attacker has potentially gained access to a Windows endpoint.
+An attacker may gain access to a Windows endpoint and use PowerShell to execute commands.
 
-Instead of installing a new command-line tool, the attacker may abuse PowerShell to execute commands.
+PowerShell is commonly used by system administrators, but it can also be abused by attackers.
 
-The attacker may attempt to hide the activity by using encoded commands, hidden windows, or execution policy bypasses.
+Therefore, PowerShell activity should be analyzed in context.
 
----
+## Hypothesis
 
-## 2. Hunting Hypothesis
+> If an attacker is abusing PowerShell for command execution, Windows PowerShell logs may contain unusual or suspicious commands.
 
-### Hypothesis
+Examples of potentially suspicious patterns include:
 
-"If an attacker is using PowerShell for malicious execution, Windows process logs may contain suspicious PowerShell commands such as encoded commands, hidden execution, execution policy bypasses, or download commands."
+- EncodedCommand
+- ExecutionPolicy Bypass
+- Hidden PowerShell execution
+- Download-related commands
+- Unusual PowerShell scripts
 
----
+## Data Source
 
-## 3. Data Required
+The hunt uses Windows PowerShell event logs.
 
-To test the hypothesis, we need Windows process execution data.
+The logs were collected using:
 
-Possible data sources:
+Windows Endpoint → Elastic Agent → Windows Integration → Elastic Cloud
 
-- Windows Security Event Logs
-- Sysmon
-- PowerShell logs
-- Splunk Windows events
+PowerShell events were identified in the following dataset:
 
-Important Windows events can include:
+`windows.powershell`
 
-- Event ID 4688 — Process Creation
-- Sysmon Event ID 1 — Process Creation
-- PowerShell Event ID 4104 — Script Block Logging
+## Hunting Environment
 
----
+Host:
 
-## 4. Indicators to Hunt
+`HOME-PC`
 
-We search for:
+Tools:
 
-powershell.exe
+- Windows PowerShell
+- Elastic Agent
+- Elastic Windows Integration
+- Elastic Discover
+- KQL
 
--EncodedCommand
-
--enc
-
--ExecutionPolicy Bypass
-
--WindowStyle Hidden
-
-Invoke-WebRequest
-
-DownloadString
-
-IEX
-
----
-
-## 5. MITRE ATT&CK Mapping
+## MITRE ATT&CK Mapping
 
 Technique:
 
-T1059.001 — PowerShell
+**T1059.001 — PowerShell**
 
 Tactic:
 
-Execution
+**Execution**
 
-The technique represents adversaries abusing PowerShell commands and scripts for execution.
+PowerShell can be used by adversaries to execute commands and scripts on Windows systems.
 
----
+## Investigation
 
-## 6. Expected Result
+When suspicious PowerShell activity is discovered, the analyst should investigate:
 
-The hunt should identify PowerShell executions that require further investigation.
-
-Not every PowerShell command is malicious.
-
-Therefore, suspicious results must be analyzed using additional context such as:
-
-- User
+- Username
 - Host
+- Timestamp
+- PowerShell command
 - Parent process
-- Command line
-- Execution time
+- Related processes
 - Network connections
+- Other events around the same time
+
+## Important Note
+
+PowerShell is a legitimate administration tool.
+
+The presence of PowerShell activity does not automatically mean that the system is compromised.
+
+Suspicious activity must be investigated using additional context.
